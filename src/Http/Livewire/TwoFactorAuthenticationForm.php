@@ -37,6 +37,13 @@ class TwoFactorAuthenticationForm extends Component
     public $showingRecoveryCodes = false;
 
     /**
+     * Wether or not to confirm actions with the current password.
+     *
+     * @var bool
+     */
+    public $confirmPassword = true;
+
+    /**
      * The OTP code for confirming two factor authentication.
      *
      * @var string|null
@@ -54,6 +61,11 @@ class TwoFactorAuthenticationForm extends Component
             is_null(Auth::user()->two_factor_confirmed_at)) {
             app(DisableTwoFactorAuthentication::class)(Auth::user());
         }
+
+        $this->confirmPassword = Features::optionEnabled(
+            Features::twoFactorAuthentication(),
+            'confirmPassword'
+        );
     }
 
     /**
